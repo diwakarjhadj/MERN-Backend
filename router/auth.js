@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router();
+const bcrypt= require('bcryptjs')
 const User = require('../model/userSchema')
 router.get('/', (req, res) => {
     res.send('Hello world from the router server');
@@ -48,7 +49,34 @@ router.post('/register', async (req, res) => {
         console.log(err);
     }
 });
+router.post('/signin', async(req,res)=>{
+    try{
+        const {email, password}= req.body;
+        if(!email||!password)
+        {
+            return res.status(400).json({error: "Please Fill all the details"})
+        }
 
+        const userLogin= await User.findOne({email: email});
+        if(userLogin)
+        {
+            const isMatch= await bcrypt.compare(password,userLogin.password)
+            if(!isMatch)
+        {
+            res.status(400).json({error:  "user error"})
+        }
+        else{
+
+            res.json({message: "user signin Successfully"})
+        }
+        }
+        else{
+            res.json({message: "Invalid Login Id or Password"})
+        }
+    } catch(err){
+        console.log(err)
+    }
+})
 
 
 module.exports = router;
