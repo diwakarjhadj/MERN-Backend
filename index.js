@@ -19,6 +19,7 @@ app.get('/about',middleware,(req,res)=>{
     res.send("Hello world from about the server")
 })
 app.get('/contact',(req,res)=>{
+    res.cookie("Test","Diwa")
     res.send("Hello world from contact the server")
 })
 app.get('/signin',(req,res)=>{
