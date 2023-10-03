@@ -1,35 +1,8 @@
-const express = require('express')
 const jwt= require('jsonwebtoken');
-const router = express.Router();
-const bcrypt = require('bcryptjs')
-const authenticate= require('../middleware/authenticate')
-const User = require('../model/userSchema')
-router.get('/', (req, res) => {
-    res.send('Hello world from the router server');
-})
+const bcrypt = require('bcryptjs');
+const User= require('../model/userSchema');
 
-// router.post('/register',(req,res)=>{
-//     const {name,email,password,cpassword,phone,work}= req.body;
-//     if(!name||!email||!password||!cpassword||!phone|| !work)
-//     {
-//         res.status(422).json({error: "please fill the Field Properly"})
-//     }
-//     User.findOne({email: email}).then(
-//         (userExist)=>{
-//             if(userExist){
-//                 return res.status(422).json({error: "Email Already Exist"});
-//             }
-//             const user= new User({name,email,password,cpassword,phone,work});
-//             user.save().then(()=>{
-//                 res.status(201).json({message: "user Registered Successfull"});
-//             }).catch((err)=>res.status(500).json({error: "Falied  to register",err}));
-//         }).catch(err=>{console.log(err);})
-// });
-
-
-// creating signup page
-
-router.post('/register', async (req, res) => {
+const register=async (req, res) => {
     const { name, email, password, cpassword, phone, work } = req.body;
     if (!name || !email || !password || !cpassword || !phone || !work) {
         return res.status(422).json({ error: "please fill the Field Properly" })
@@ -50,12 +23,9 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         console.log(err);
     }
-});
+}
 
-// Creating signin page
-
-
-router.post('/signin', async (req, res) => {
+const login=async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -84,11 +54,5 @@ router.post('/signin', async (req, res) => {
     } catch (err) {
         console.log(err);
     }
-});
-
-
-router.get('/about',authenticate,(req,res)=>{
-    res.send("Hello world from about the server")
-    res.send(req.validUser);
-})
-module.exports = router;
+}
+module.exports={register,login};
