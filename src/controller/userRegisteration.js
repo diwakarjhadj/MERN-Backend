@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 const User= require('../model/userSchema');
 
 const register=async (req, res) => {
-    const { name, email, password, cpassword, phone, work } = req.body;
-    if (!name || !email || !password || !cpassword || !phone || !work) {
+    const { email, password, cpassword } = req.body;
+    if (!email || !password || !cpassword) {
         return res.status(422).json({ error: "please fill the Field Properly" })
     }
 
@@ -15,7 +15,7 @@ const register=async (req, res) => {
             return res.status(422).json({ error: "Email Already Exist" });
         }
 
-        const user = new User({ name, email, password, cpassword, phone, work });
+        const user = new User({ email, password, cpassword });
 
         await user.save();
         res.status(201).json({ message: "user Registered Successfull" });
